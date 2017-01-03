@@ -12,5 +12,6 @@ const router = express.Router();
 
 router.get("/", indexController.showIndex);
 router.get("/:photoName", photoController.showPhoto);
+router.post("/:photoName", photoController.uploadImages);
 
 module.exports = router;
