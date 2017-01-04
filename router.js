@@ -11,7 +11,9 @@ const photoController = require('./controller/photo');
 const router = express.Router();
 
 router.get("/", indexController.showIndex);
+router.post("/", indexController.addPhotoName);
 router.get("/:photoName", photoController.showPhoto);
-router.post("/:photoName", photoController.uploadImages);
+//router.post("/:photoName", photoController.uploadImages); //如果有多个post("/:photoName",) 就无法判断走哪个了
+router.post("/photo/:photoName", photoController.uploadImages); // 加了photo后模板中也要加photo
 
 module.exports = router;

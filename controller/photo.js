@@ -36,7 +36,7 @@ exports.uploadImages = function(req, res, next) {
     let fullPath = path.join(photoDir, photoName);
 
     let form = new formidable.IncomingForm();
-    form.uploadDir = path.join(__dirname, "/../tempUpload/");
+    form.uploadDir = path.normalize(__dirname + "/../tempUpload/");
     form.parse(req, function(err, fields, files) {
         let size = files.photoImage.size;
         if (size > (2 * 1024 * 1024)) {
@@ -45,11 +45,15 @@ exports.uploadImages = function(req, res, next) {
             fs.unlink(files.photoImage.path);
             return;
         }
+
         let oldPath = files.photoImage.path;
         let extName = path.extname(files.photoImage.name);
         let ranNum = parseInt(Math.random() * 89999 + 10000);
         let date = sd.format(new Date(), 'YYYYMMDDHHmmss');
 
+        if (!['.jpg', '.png', '.gif'].includes(extName)) {
+            return res.send('只接受图片');
+        }
         let distPath = path.join(fullPath, date + ranNum) + extName;
 
         fs.rename(oldPath, distPath, function(err) {
